@@ -1,8 +1,18 @@
-var controls_extension = "bjlffedmfnbmdojbpaeeibfpckoikpce"; //Extension that is used to control the player
+var controls_extension = null; //Extension that is used to control the player
 var youtube_pattern = "(http://)?(www)?\.?youtube.com/watch\?.";
 
 var enabled_tab = -1; //Currently active youtube tab
 var active_tabs = []; //All youtube tabs
+
+function setButtonExtensionID() {
+	if(controls_extension == null) {
+		chrome.management.getAll(function(extensions) {
+			for(var i=0; i<extensions.length; i++)
+				if(extensions[i].name == "Youtube Button")
+					controls_extension = extensions[i].id
+		});
+	}
+}
 
 function activateRemote(tabId, changeInfo, tab) {
 	var youtube_match = tab.url.match(youtube_pattern);
@@ -30,6 +40,13 @@ function removeRemote(tabId) {
 }
 
 function toggleRemote(tab) {	
+	//Make sure the Button extension is installed
+	setButtonExtensionID();
+	if(controls_extension == null) {
+		alert('Cannot turn on Remote because the "Youtube Button" extension is not installed.');
+		return;
+	}
+
 	if (enabled_tab == tab.id) {
 		chrome.pageAction.setIcon({tabId: tab.id, path: "off_remote.png"});
 		enabled_tab = -1;

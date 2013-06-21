@@ -3,10 +3,10 @@
 
   "name": "YouTube Remote",
   "description": "Remote for Youtube controls",
-  "version": "1.0",
+  "version": "1.2",
   "background": { "scripts": ["background.js"] },
   "permissions": [
-    "tabs"
+    "tabs", "management"
   ],
   "page_action": {
     "default_icon": {"19": "off_remote.png"}
